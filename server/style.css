@@ -1,0 +1,61 @@
+body{
+	background-image: url(bg.jpg);
+	color: #FFF;
+}
+.title {
+	margin-bottom: 35px;
+	text-align: center;
+    font-size: 54px;
+}
+
+.jscolor {
+	width: 100px;
+    margin-right: 57px;
+}
+
+.colors {
+    text-align: center;
+    font-size: 20px;
+}
+
+.buttons {
+	margin: 59px 0 40px 0;
+	text-align: center;
+}
+
+.flash,
+.clear {
+	border-radius: 10px;
+    width: 118px;
+    height: 39px;
+    font-size: 17px;
+    background-color: #efefef;
+    border: 0;
+    cursor: pointer;
+}
+
+.flash:hover,
+.clear:hover {
+	background-color: #ababab;
+}
+
+.flash {
+	margin-left: 112px;
+}
+
+hr {
+	width: 943px;
+}
+
+.box {
+	width: 939px;
+    height: 600px;
+    border: 1px solid;
+    margin: 0 auto;
+}
+
+.lyrics {
+    text-align: center;
+    font-size: 53px;
+    margin-top: 98px;
+}

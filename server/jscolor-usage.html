@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic usage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script type="text/javascript"></script>
+<script src="jquery-3.2.1.min.js"></script>
+<script src="jscolor.js"></script>
+<script charset="utf-8">
+var lyrics = [
+"She saves her lovin', early in the mornin'",
+"Just for me, oh yeah",
+"She saves her lovin', early in the mornin'",
+"Just for me, oh yeah",
+"She saves her lovin', just for me",
+"Ah, she, loves me, so tenderly",
+"I got a woman, way over town",
+"That's good to me, oh yeah",
+
+"She's there to love me",
+"Both day and night",
+"Never grumbles or fusses",
+"Always treats me right",
+"Never runnin' in the streets",
+"Leavin' me alone",
+"She knows a woman's place",
+"Is right there, now, in her home",
+
+"I got a woman, way over town",
+"That's good to me, oh yeah",
+"Say I got a woman, way over town",
+"That's good to me, oh yeah",
+"Oh, she's my baby, don't you understand",
+"Yeah, I'm her lovin' man, now",
+"I got a woman, way over town",
+"That's good to me, oh yeah",
+"Well, don't you know she's all right",
+"Well, don't you know she's all right",
+"She's all right, she's all right"
+]
+var counter = 0;
+var colors = [];
+	var socket = new WebSocket("ws://stagecast.se/api/events/team5test/ws");
+	socket.onopen= function(){
+        
+		
+	}
+var timeout;
+var flash = false;
+$(document).ready(function(){
+
+	$('#colorpanel').change(function(){
+	    colors.push(rgb2hex(this.style.backgroundColor));
+        // $(".choosed").append("<div style='width: 10px; height:10px; border: 1px solid'>hello world</div>")
+	    console.log(colors)
+	})
+
+
+
+
+
+
+
+function rgb2hex(rgb){
+ rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+ return (rgb && rgb.length === 4) ? "#" +
+  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+}
+
+
+
+
+
+
+
+
+	var timeout = setInterval(function(){ 
+    
+    $(".box").css('backgroundColor',colors[counter % colors.length])
+     send();
+	// socket.send(JSON.stringify(colors[counter++ % colors.length])); 
+    }
+	, 1000);
+
+
+
+
+
+
+$(document).on('change','#select',function(){
+
+    var interval = $('#select').val();
+
+    console.log(interval)
+    clearInterval(timeout);
+    if(interval == 0) return;
+	timeout = setInterval(function(){ 
+	    
+	    $(".box").css('backgroundColor',colors[counter % colors.length])
+	    send();
+
+		// socket.send(JSON.stringify(colors[counter++ % colors.length])); 
+	    }
+		, interval);
+
+	})	
+    clearInterval(timeout);
+})
+
+
+function send(){
+	data = {
+		'flash': flash,
+		'text': lyrics[counter % lyrics.length],
+		'color': colors[counter++ % colors.length]
+	}
+	$('#lyrics').text(lyrics[counter % lyrics.length]);
+	socket.send(JSON.stringify(data));
+}
+
+$(document).on('click','.clear',function(){
+	colors = ['#FFF'];
+})
+
+
+$(document).on('click','.flash',function(){
+	flash = !flash;
+	send();
+})
+
+
+
+</script>
+<div class="title">Control Panel</div>
+<div class="colors">
+choose color: <input class="jscolor" value="ab2567" id="colorpanel">
+<label>choose time intervals:</label>
+<select id="select">
+    <option value="0">stop</option>
+    <option value="1000">One</option>
+    <option value="2000">Two</option>
+    <option value="3000">Three</option>
+</select>
+</div>
+<div class="buttons">
+<button class="clear">clearColors</button>
+<button class="flash">flashToggle</button>
+</div>
+<hr>
+
+<div class="box">
+	<p id="lyrics" class="lyrics"></p>
+</div>
+
+</body>
+</html>
